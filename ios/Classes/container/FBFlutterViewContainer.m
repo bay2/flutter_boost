@@ -188,15 +188,24 @@ _Pragma("clang diagnostic pop")
 
 - (void)dismissViewControllerAnimated:(BOOL)flag
                            completion:(void (^)(void))completion {
+    BOOL detachFlutterEngineIfNeeded = YES;
+    if ([self.presentedViewController isMemberOfClass:NSClassFromString(@"UIActivityViewSuccessController")]) {
+        detachFlutterEngineIfNeeded = NO;
+    }
+    
   [super dismissViewControllerAnimated:flag
                             completion:^() {
-                              if (completion) {
-                                completion();
-                              }
-                              //当VC被dismiss时，就通知flutter层销毁page
-                              [self detachFlutterEngineIfNeeded];
-                              [self notifyWillDealloc];
-                            }];
+      
+      if (completion) {
+        completion();
+      }
+      //当VC被dismiss时，就通知flutter层销毁page
+      if (detachFlutterEngineIfNeeded) {
+          [self detachFlutterEngineIfNeeded];
+          [self notifyWillDealloc];
+      }
+                              
+    }];
 }
 
 - (void)dealloc {
