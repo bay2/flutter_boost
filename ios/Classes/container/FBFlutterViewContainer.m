@@ -189,7 +189,8 @@ _Pragma("clang diagnostic pop")
 - (void)dismissViewControllerAnimated:(BOOL)flag
                            completion:(void (^)(void))completion {
     BOOL detachFlutterEngineIfNeeded = YES;
-    if ([self.presentedViewController isMemberOfClass:NSClassFromString(@"UIActivityViewSuccessController")]) {
+    if ([self.presentedViewController isMemberOfClass:NSClassFromString(@"UIActivityViewSuccessController")] || [self.presentedViewController isMemberOfClass:NSClassFromString(@"PHPickerViewController")] ||
+        [self.presentedViewController isMemberOfClass:NSClassFromString(@"UIDocumentPickerViewController")]) {
         detachFlutterEngineIfNeeded = NO;
     }
     
